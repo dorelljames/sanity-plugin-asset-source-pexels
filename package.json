@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-asset-source-pexels",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -8,7 +8,10 @@
     "watch": "sanipack build --watch",
     "prepublishOnly": "sanipack build && sanipack verify"
   },
-  "repository": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dorelljames/sanity-plugin-asset-source-pexels"
+  },
   "keywords": [
     "sanity",
     "sanity-plugin"
