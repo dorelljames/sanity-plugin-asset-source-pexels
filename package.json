@@ -16,8 +16,7 @@
   "author": "Dorell James <galangdj@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "pexels": "^1.2.1",
-    "prop-types": "15.7.2"
+    "pexels": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "7.32.0",
