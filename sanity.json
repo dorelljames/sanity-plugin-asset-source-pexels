@@ -1,0 +1,13 @@
+{
+  "paths": {
+    "source": "./src",
+    "compiled": "./lib"
+  },
+  "parts": [
+    {
+      "name": "part:asset-source-pexels/image-asset-source",
+      "implements": "part:@sanity/form-builder/input/image/asset-source",
+      "path": "index.js"
+    }
+  ]
+}

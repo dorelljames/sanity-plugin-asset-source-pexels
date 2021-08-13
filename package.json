@@ -1,0 +1,51 @@
+{
+  "name": "sanity-plugin-asset-source-pexels",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "sanipack build",
+    "watch": "sanipack build --watch",
+    "prepublishOnly": "sanipack build && sanipack verify"
+  },
+  "repository": {},
+  "keywords": [
+    "sanity",
+    "sanity-plugin"
+  ],
+  "author": "Dorell James <galangdj@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "pexels": "^1.2.1",
+    "prop-types": "15.7.2"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-sanity": "5.1.0",
+    "eslint-plugin-react": "7.24.0",
+    "prettier": "2.3.2",
+    "sanipack": "2.0.1"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
+  },
+  "eslintConfig": {
+    "parser": "sanipack/babel/eslint-parser",
+    "extends": [
+      "sanity",
+      "sanity/react",
+      "prettier",
+      "prettier/react"
+    ]
+  },
+  "peerDependencies": {
+    "@sanity/base": ">= 0.135.0",
+    "@sanity/components": ">= 0.135.0",
+    "lodash": ">= 4.17.4",
+    "react": ">= 16.2"
+  }
+}
