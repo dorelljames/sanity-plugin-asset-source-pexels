@@ -1,5 +1,7 @@
 # sanity-plugin-asset-source-pexels
 
+> Be careful with your *API key*. If you use this Sanity plugin, it's a good idea to make your repository private. Technically, the said API key can be accessed inside of the JS-bundle if someone knows the domain for the studio.
+
 ## Installation
 
 ```
