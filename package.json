@@ -27,7 +27,7 @@
     "eslint-config-sanity": "5.1.0",
     "eslint-plugin-react": "7.26.1",
     "prettier": "2.4.1",
-    "sanipack": "2.0.1"
+    "sanipack": "2.1.0"
   },
   "prettier": {
     "semi": false,
