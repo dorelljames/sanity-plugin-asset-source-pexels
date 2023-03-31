@@ -10,6 +10,12 @@ export function usePhotos(config: PexelsAssetSourceConfig) {
   const perPage = config?.results?.perPage!
 
   const [state, setState] = React.useState('idle') // loading > success | error
+  const [curated, setCurated] = React.useState<Photos>({
+    photos: [],
+    page: 0, // offset to start at page 1
+    per_page: perPage,
+    next_page: 1,
+  })
   const [data, setData] = React.useState<Photos>({
     photos: [],
     page: 0, // offset to start at page 1
@@ -23,8 +29,8 @@ export function usePhotos(config: PexelsAssetSourceConfig) {
     setState('loading')
 
     const search = debouncedQuery
-      ? client.photos.search({query: debouncedQuery, perPage, page: data?.page + 1})
-      : client.photos.curated({perPage, page: data?.page + 1})
+      ? client.photos.search({query: debouncedQuery, per_page: perPage, page: data?.page + 1})
+      : client.photos.curated({per_page: perPage, page: data?.page + 1})
 
     return search
       .then((result) => {
@@ -40,9 +46,17 @@ export function usePhotos(config: PexelsAssetSourceConfig) {
             ...result,
             photos: [...prev.photos, ...result.photos],
           }))
-        }
+        } else {
+          // Save curated photos for later
+          if (
+            String(result?.next_page).startsWith('https://api.pexels.com/v1/curated') &&
+            result.page === 1
+          ) {
+            setCurated(result)
+          }
 
-        setData(result)
+          setData(result)
+        }
       })
       .then(() => setState('success'))
       .catch(() => setState('error'))
@@ -60,6 +74,9 @@ export function usePhotos(config: PexelsAssetSourceConfig) {
     if (debouncedQuery) {
       setState('loading')
       loadMore()
+    } else {
+      // Revert to curated photos
+      setData(curated)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery])

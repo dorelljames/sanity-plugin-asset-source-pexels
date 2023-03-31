@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import {TextInput} from '@sanity/ui'
+import {Dialog, TextInput, Flex, Spinner, Text, Box} from '@sanity/ui'
 import type {Photo as IPhoto} from 'pexels'
 import React from 'react'
 import type {AssetFromSource, AssetSourceComponentProps, ImageAsset} from 'sanity'
@@ -9,12 +9,12 @@ import {getPhotoDescription} from '../utils'
 import Attribution from './Attribution'
 import Photo from './Photo'
 import Scroller from './Scroller'
-import {CustomDialog} from './CustomDialog'
 import {ImageGrid} from './Pexel.styled'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export const PexelsAssetSource = React.forwardRef(
   (props: AssetSourceComponentProps & {config: PexelsAssetSourceConfig}, ref) => {
-    const {isLoading, items, loadMore, query, setQuery, setData} = usePhotos({
+    const {isLoading, hasNextPage, items, loadMore, query, setQuery, setData} = usePhotos({
       API_KEY: props.config.API_KEY,
       results: props?.config?.results ?? {perPage: 25},
       searchTimeout: props?.config?.searchTimeout ?? 500,
@@ -53,24 +53,56 @@ export const PexelsAssetSource = React.forwardRef(
     }
 
     return (
-      <CustomDialog title={<Attribution />} onClose={handleClose} isOpen>
-        <TextInput
-          onChange={handleChange}
-          placeholder="Enter keyword here to search for photos..."
-          value={query}
-          style={{display: 'fixed'}}
-        />
-        <Scroller onLoad={loadMore} name={query} isLoading={isLoading}>
-          <ImageGrid>
-            {!isLoading && items?.length === 0 && (
-              <p>Oops! Try again with a different keyword...</p>
-            )}
-            {items?.map((photo) => (
-              <Photo key={photo.id} onSelect={handleSelect} data={photo} />
-            ))}
-          </ImageGrid>
-        </Scroller>
-      </CustomDialog>
+      <Dialog
+        open
+        header={<Attribution />}
+        id="pexels-asset-source"
+        onClose={handleClose}
+        width={4}
+      >
+        <Box padding={2}>
+          <TextInput
+            onChange={handleChange}
+            placeholder="Enter keyword here to search for photos..."
+            value={query}
+            style={{display: 'fixed'}}
+          />
+          <InfiniteScroll
+            dataLength={items.length}
+            next={loadMore}
+            hasMore={hasNextPage}
+            scrollThreshold={0.99}
+            height="60vh"
+            loader={
+              <Flex align="center" justify="center" padding={3}>
+                <Spinner muted />
+              </Flex>
+            }
+            endMessage={
+              <Text size={1} muted>
+                No more results
+              </Text>
+            }
+          >
+            <ImageGrid>
+              {items?.map((photo) => (
+                <Photo key={photo.id} onSelect={handleSelect} data={photo} />
+              ))}
+            </ImageGrid>
+          </InfiniteScroll>
+
+          {/* <Scroller onLoad={loadMore} name={query} isLoading={isLoading}>
+            <ImageGrid>
+              {!isLoading && items?.length === 0 && (
+                <p>Oops! Try again with a different keyword...</p>
+              )}
+              {items?.map((photo) => (
+                <Photo key={photo.id} onSelect={handleSelect} data={photo} />
+              ))}
+            </ImageGrid>
+          </Scroller> */}
+        </Box>
+      </Dialog>
     )
   }
 )

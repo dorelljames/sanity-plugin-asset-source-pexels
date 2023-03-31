@@ -10,7 +10,7 @@ export function initPlugin(config: PexelsAssetSourceConfig) {
   }
 
   const Component = (args: AssetSourceComponentProps & {config: PexelsAssetSourceConfig}) => {
-    return <PexelsAssetSource {...args} />
+    return <PexelsAssetSource {...args} config={config} />
   }
 
   return {

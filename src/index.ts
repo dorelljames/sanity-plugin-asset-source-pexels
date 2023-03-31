@@ -7,12 +7,12 @@ import type {PexelsAssetSourceConfig} from './types'
  *
  * ```ts
  * import {defineConfig} from 'sanity'
- * import {pexelsAssetSourcePlugin} from 'sanity-plugin-asset-source-pexels'
+ * import {pexelsImageAsset} from 'sanity-plugin-asset-source-pexels'
  * import { initPlugin } from './components/Pexels';
  *
  * export default defineConfig({
  *  plugins: [
- *   pexelsAssetSourcePlugin({
+ *   pexelsImageAsset({
  *    API_KEY: 'YOUR_PEXELS_API_KEY',
  *   }),
  * });
@@ -23,7 +23,7 @@ import type {PexelsAssetSourceConfig} from './types'
  * ```ts
  * export default defineConfig({
  *  plugins: [
- *   pexelsAssetSourcePlugin({
+ *   pexelsImageAsset({
  *    API_KEY: 'YOUR_PEXELS_API_KEY',
  *    results: {
  *      perPage: 50
@@ -33,7 +33,7 @@ import type {PexelsAssetSourceConfig} from './types'
  * });
  * ```
  */
-export const pexelsAssetSourcePlugin = definePlugin<PexelsAssetSourceConfig>(
+export const pexelsImageAsset = definePlugin<PexelsAssetSourceConfig>(
   ({API_KEY, results: {perPage = 24} = {}, searchTimeout = 500}) => {
     return {
       name: 'asset-source-pexels-plugin',
