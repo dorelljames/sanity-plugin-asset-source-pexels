@@ -8,14 +8,15 @@ import {PexelsAssetSourceConfig} from '../types'
 import {getPhotoDescription} from '../utils'
 import Attribution from './Attribution'
 import Photo from './Photo'
-import Scroller from './Scroller'
 import {ImageGrid} from './Pexel.styled'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import {ErrorMessage} from './ErrorMessage'
 
 export const PexelsAssetSource = React.forwardRef(
   (props: AssetSourceComponentProps & {config: PexelsAssetSourceConfig}, ref) => {
-    const {isLoading, hasNextPage, items, loadMore, query, setQuery, setData} = usePhotos({
-      API_KEY: props.config.API_KEY,
+    const {error, hasNextPage, items, loadMore, query, setQuery, setData} = usePhotos({
+      API_KEY: props?.config?.API_KEY ?? '',
+      useProxyClient: props?.config?.useProxyClient ?? false,
       results: props?.config?.results ?? {perPage: 25},
       searchTimeout: props?.config?.searchTimeout ?? 500,
     })
@@ -67,6 +68,7 @@ export const PexelsAssetSource = React.forwardRef(
             value={query}
             style={{display: 'fixed'}}
           />
+          {error && <ErrorMessage />}
           <InfiniteScroll
             dataLength={items.length}
             next={loadMore}
@@ -90,17 +92,6 @@ export const PexelsAssetSource = React.forwardRef(
               ))}
             </ImageGrid>
           </InfiniteScroll>
-
-          {/* <Scroller onLoad={loadMore} name={query} isLoading={isLoading}>
-            <ImageGrid>
-              {!isLoading && items?.length === 0 && (
-                <p>Oops! Try again with a different keyword...</p>
-              )}
-              {items?.map((photo) => (
-                <Photo key={photo.id} onSelect={handleSelect} data={photo} />
-              ))}
-            </ImageGrid>
-          </Scroller> */}
         </Box>
       </Dialog>
     )

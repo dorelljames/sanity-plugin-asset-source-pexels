@@ -1,12 +1,18 @@
 /* eslint-disable camelcase */
 import React from 'react'
 import {Photos, createClient} from 'pexels'
+import {proxyClient} from '../proxyClient'
 import useDebounce from './useDebounce'
 import type {PexelsAssetSourceConfig} from '../types'
 
 export function usePhotos(config: PexelsAssetSourceConfig) {
-  const {API_KEY} = config
-  const client = React.useMemo(() => createClient(API_KEY), [API_KEY])
+  const client = React.useMemo(() => {
+    if (config?.useProxyClient) {
+      return proxyClient()
+    }
+
+    return createClient(config?.API_KEY)
+  }, [config?.API_KEY, config?.useProxyClient])
   const perPage = config?.results?.perPage!
 
   const [state, setState] = React.useState('idle') // loading > success | error
@@ -32,34 +38,29 @@ export function usePhotos(config: PexelsAssetSourceConfig) {
       ? client.photos.search({query: debouncedQuery, per_page: perPage, page: data?.page + 1})
       : client.photos.curated({per_page: perPage, page: data?.page + 1})
 
-    return search
-      .then((result) => {
-        if ('error' in result) {
-          setState('error')
-          return
+    return search.then((result) => {
+      if ('error' in result) {
+        setState('error')
+        return
+      }
+
+      if (result.page > 1) {
+        // eslint-disable-next-line consistent-return
+        setData((prev) => ({
+          ...prev,
+          ...result,
+          photos: [...prev.photos, ...result.photos],
+        }))
+      } else {
+        // Save curated photos for later
+        if (String(result?.next_page).startsWith('curated') && result.page === 1) {
+          setCurated(result)
         }
 
-        if (result.page > 1) {
-          // eslint-disable-next-line consistent-return
-          setData((prev) => ({
-            ...prev,
-            ...result,
-            photos: [...prev.photos, ...result.photos],
-          }))
-        } else {
-          // Save curated photos for later
-          if (
-            String(result?.next_page).startsWith('https://api.pexels.com/v1/curated') &&
-            result.page === 1
-          ) {
-            setCurated(result)
-          }
-
-          setData(result)
-        }
-      })
-      .then(() => setState('success'))
-      .catch(() => setState('error'))
+        setData(result)
+      }
+      setState('success')
+    })
   }
 
   // fetches curated photos

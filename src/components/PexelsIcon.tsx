@@ -1,5 +1,4 @@
-import React from 'react'
-
+// eslint-disable-next-line react/display-name
 export default () => (
   <svg width={18} height={18} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <title>{'Pexels icon'}</title>
