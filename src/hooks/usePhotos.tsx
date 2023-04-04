@@ -1,18 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react'
-import {Photos, createClient} from 'pexels'
-import {proxyClient} from '../proxyClient'
+import {Photos} from 'pexels'
+import {createClient} from '../createClient'
 import useDebounce from './useDebounce'
 import type {PexelsAssetSourceConfig} from '../types'
 
 export function usePhotos(config: PexelsAssetSourceConfig) {
   const client = React.useMemo(() => {
-    if (config?.useProxyClient) {
-      return proxyClient()
-    }
-
     return createClient(config?.API_KEY)
-  }, [config?.API_KEY, config?.useProxyClient])
+  }, [config?.API_KEY])
   const perPage = config?.results?.perPage!
 
   const [state, setState] = React.useState('idle') // loading > success | error
