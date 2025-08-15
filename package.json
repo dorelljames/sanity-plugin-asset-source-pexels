@@ -52,7 +52,7 @@
     "react-infinite-scroll-component": "^6.1.0"
   },
   "devDependencies": {
-    "@sanity/pkg-utils": "^2.2.5",
+    "@sanity/pkg-utils": "^7.0.0",
     "@sanity/plugin-kit": "^3.1.7",
     "@types/react": "^18.0.28",
     "@types/styled-components": "^5.1.26",
