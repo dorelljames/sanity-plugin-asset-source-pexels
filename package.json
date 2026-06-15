@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@sanity/pkg-utils": "^2.2.5",
-    "@sanity/plugin-kit": "^3.1.7",
+    "@sanity/plugin-kit": "^4.0.0",
     "@types/react": "^18.0.28",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
